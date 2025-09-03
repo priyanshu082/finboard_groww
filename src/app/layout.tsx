@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-// import { Toaster } from "@/components/ui/toaster";
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@/components/theme-provider';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "FinBoard - Customizable Finance Dashboard",
-  description: "Build your own real-time finance monitoring dashboard with custom widgets",
+  title: 'FinBoard - Real-time Financial Dashboard',
+  description: 'Create beautiful, real-time dashboards by connecting to any API',
 };
 
 export default function RootLayout({
@@ -25,8 +24,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          {/* <Toaster /> */}
+          <main>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
