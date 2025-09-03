@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, TrendingUp, BarChart3, Activity, Eye, RefreshCw, Grid3X3, Sun, Moon, Github } from 'lucide-react';
-import { useWidgetStore } from '@/store/widgetStore';
+import { Plus, TrendingUp, BarChart3, Activity, Eye, RefreshCw, Grid3X3, Github } from 'lucide-react';
+import { useWidgetStore, Widget } from '@/store/widgetStore';
 import { CardWidget } from '@/components/widgets/CardWidget';
 import { TableWidget } from '@/components/widgets/TableWidget';
 import { ChartWidget } from '@/components/widgets/ChartWidget';
@@ -33,7 +33,7 @@ export function Dashboard() {
     reorderWidgets(result.source.index, result.destination.index);
   };
 
-  const renderWidget = (widget: any) => {
+  const renderWidget = (widget: Widget) => {
     const props = { widget };
     
     switch (widget.type) {

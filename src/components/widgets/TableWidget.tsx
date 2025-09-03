@@ -9,14 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { 
   Search, ArrowUpDown, RefreshCw, X, MoreVertical, ChevronLeft, ChevronRight, 
-  Table2, Filter, SortAsc, SortDesc, Database, AlertTriangle, ChevronsLeft, ChevronsRight 
+  Table2, SortAsc, SortDesc, Database, AlertTriangle, ChevronsLeft, ChevronsRight 
 } from 'lucide-react';
-import { useWidgetStore } from '@/store/widgetStore';
+import { useWidgetStore, Widget } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue, formatValue } from '@/lib/dataUtils';
 
 const sanitizePath = (p: string) => p.replace(/^\[0\]\.?/, '');
 
-export function TableWidget({ widget }: { widget: any }) {
+export function TableWidget({ widget }: { widget: Widget }) {
   const { removeWidget, refreshWidget } = useWidgetStore();
   
   const [search, setSearch] = useState('');

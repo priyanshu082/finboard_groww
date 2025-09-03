@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { RefreshCw, X, MoreVertical, TrendingUp, Activity } from 'lucide-react';
-import { useWidgetStore } from '@/store/widgetStore';
+import { useWidgetStore, Widget } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue } from '@/lib/dataUtils';
 
 
@@ -88,7 +88,7 @@ function SimpleLineChart({
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               color: isDark ? '#F9FAFB' : '#111827',
             }}
-            formatter={(value: any) => [value, 'Value']}
+            formatter={(value: unknown) => [String(value), 'Value']}
           />
           <Line
             type="monotone"
@@ -109,7 +109,7 @@ function SimpleLineChart({
   );
 }
 
-export function ChartWidget({ widget }: { widget: any }) {
+export function ChartWidget({ widget }: { widget: Widget }) {
   const { removeWidget, refreshWidget } = useWidgetStore();
 
   // Process chart data

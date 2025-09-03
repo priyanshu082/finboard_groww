@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Define proper types for cache and rate limiting
+interface CacheEntry {
+  data: unknown;
+  expires: number;
+}
+
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
+
 // Simple in-memory cache and rate limiting
-const cache = new Map<string, { data: any; expires: number }>();
-const rateLimits = new Map<string, { count: number; resetTime: number }>();
+const cache = new Map<string, CacheEntry>();
+const rateLimits = new Map<string, RateLimitEntry>();
 
 const CACHE_TTL = 30 * 1000; // 30 seconds
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 60; // per IP per 
+const MAX_REQUESTS = 60; // per IP per minute
 
 function getClientIP(req: NextRequest): string {
   return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
@@ -31,7 +42,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-function getCached(key: string): any | null {
+function getCached(key: string): unknown | null {
   const cached = cache.get(key);
   if (cached && Date.now() < cached.expires) {
     return cached.data;
@@ -40,7 +51,7 @@ function getCached(key: string): any | null {
   return null;
 }
 
-function setCache(key: string, data: any): void {
+function setCache(key: string, data: unknown): void {
   cache.set(key, {
     data,
     expires: Date.now() + CACHE_TTL
@@ -59,7 +70,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { url, apiKey } = await req.json();
+    const { url, apiKey } = await req.json() as { url?: string; apiKey?: string };
     
     if (!url || typeof url !== 'string') {
       return NextResponse.json(
@@ -107,7 +118,7 @@ export async function POST(req: NextRequest) {
       throw new Error(`API Error: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as unknown;
     
     // Cache the response
     setCache(cacheKey, data);

@@ -22,7 +22,7 @@ interface AddWidgetModalProps {
 interface FieldInfo {
   path: string;
   type: string;
-  value: any;
+  value: unknown;
 }
 
 function getUniqueKey(field: FieldInfo, idx: number) {
@@ -43,7 +43,7 @@ export function AddWidgetModal({ open, onOpenChange }: AddWidgetModalProps) {
     success: boolean;
     message: string;
     fields: FieldInfo[];
-    rawData?: any;
+    rawData?: unknown;
   } | null>(null);
   
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
@@ -294,7 +294,7 @@ export function AddWidgetModal({ open, onOpenChange }: AddWidgetModalProps) {
                       className="p-4 cursor-pointer hover:shadow-md transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-600"
                       onClick={() => {
                         setApiUrl(api.url);
-                        setDisplayMode(api.type as any);
+                        setDisplayMode(api.type as 'card' | 'table' | 'chart');
                         setWidgetName(api.name);
                       }}
                     >

@@ -10,7 +10,7 @@ export interface Widget {
   apiKey?: string;
   selectedFields: string[];
   refreshInterval: number;
-  data?: any;
+  data?: unknown;
   error?: string;
   isLoading?: boolean;
   lastUpdated: number;
@@ -28,7 +28,7 @@ interface WidgetStore {
   refreshWidget: (id: string) => Promise<void>;
   reorderWidgets: (startIndex: number, endIndex: number) => void;
   setAddModalOpen: (open: boolean) => void;
-  testApiUrl: (url: string, apiKey?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+  testApiUrl: (url: string, apiKey?: string) => Promise<{ success: boolean; data?: unknown; error?: string }>;
 }
 
 export const useWidgetStore = create<WidgetStore>()(
@@ -129,7 +129,7 @@ export const useWidgetStore = create<WidgetStore>()(
         widgets: state.widgets.map(w => ({
           ...w,
           isLoading: false, // Don't persist loading state
-          data: Array.isArray(w.data) ? w.data.slice(0, 50) : w.data // Limit data size
+          data: Array.isArray(w.data) ? (w.data as unknown[]).slice(0, 50) : w.data // Limit data size
         }))
       })
     }

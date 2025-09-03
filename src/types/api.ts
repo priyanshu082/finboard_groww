@@ -1,5 +1,5 @@
 // Generic API response for any JSON API
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data: T | null;
   error?: string;
   success: boolean;
@@ -10,7 +10,6 @@ export interface ApiResponse<T = any> {
 export interface FieldInfo {
   path: string;
   type: string;
-  value: any;
+  value: unknown;
   selected?: boolean;
 }
-  
