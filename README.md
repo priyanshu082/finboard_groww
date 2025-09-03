@@ -18,13 +18,36 @@
 - **📊 Charts**: Interactive line, bar, and area charts with real-time updates.
 
 ### 🛡️ Security, Performance & Data Handling
-- **Secure Proxy Server**: All API requests are routed through a server-side proxy. This protects your API keys, avoids CORS issues, and keeps sensitive credentials out of the browser. The proxy also enables you to connect to third-party APIs securely from the frontend.
-- **Caching**: The proxy server implements in-memory caching for API responses, reducing redundant requests and improving dashboard performance. Cached data is served for a short period (e.g., 30 seconds) to ensure both speed and freshness.
-- **Rate Limiting**: Built-in rate limiting on the proxy server helps prevent API abuse and keeps your usage within safe limits.
-- **Data Persistence**: Widget configurations and dashboard layouts are persisted locally (e.g., in localStorage or IndexedDB), so your customizations remain intact even after refreshing or closing the browser.
-- **State Management with Zustand**: FinBoard uses [Zustand](https://github.com/pmndrs/zustand) for lightweight, fast, and scalable state management. All widget states, dashboard layouts, and user preferences are managed efficiently and can be easily persisted.
-- **Error Handling**: Comprehensive error states and loading indicators for robust user experience.
-- **Data Validation**: Smart data parsing and field type detection for reliable visualizations.
+
+**Key Highlights:**
+
+- **🔒 Secure Proxy Server**
+  - All API requests go through a server-side proxy.
+  - Protects your API keys and sensitive credentials.
+  - Solves CORS issues and enables secure frontend-to-API communication.
+
+- **⚡ In-Memory Caching**
+  - Proxy server caches API responses for ~30 seconds.
+  - Reduces redundant requests and boosts dashboard speed.
+  - Ensures data is both fresh and fast.
+
+- **🚦 Rate Limiting**
+  - Proxy server enforces per-IP rate limits.
+  - Prevents API abuse and keeps usage within safe limits.
+
+- **💾 Data Persistence**
+  - Widget setups and dashboard layouts are saved locally (localStorage/IndexedDB).
+  - Your customizations stay even after refresh or browser restart.
+
+- **🗂️ State Management (Zustand)**
+  - Uses [Zustand](https://github.com/pmndrs/zustand) for fast, scalable state management.
+  - Efficiently manages widget states, layouts, and user preferences.
+
+- **🛑 Robust Error Handling**
+  - Clear error states and loading indicators for a smooth user experience.
+
+- **🧠 Smart Data Validation**
+  - Automatic data parsing and field type detection for reliable, accurate visualizations.
 
 ### 🎨 User Experience
 - **Dark/Light Theme**: Seamless theme switching with system preference detection.
