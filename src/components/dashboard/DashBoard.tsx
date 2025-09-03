@@ -85,7 +85,7 @@ export function Dashboard() {
             <div className="flex items-center space-x-2">
               {/* Github Link */}
               <a
-                href="https://github.com/"
+                href="https://github.com/priyanshu082/finboard_groww"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition"

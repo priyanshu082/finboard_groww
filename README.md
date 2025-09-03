@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinBoard 
 
-## Getting Started
+**FinBoard** is a customizable, real-time finance dashboard builder that lets you create beautiful data visualizations by connecting to any JSON API. Build your own financial monitoring dashboard with drag-and-drop widgets, real-time data updates, and seamless API integration.
 
-First, run the development server:
+![FinBoard Dashboard](public/groww_img.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Core Functionality
+- **Dashboard Builder**: Create, customize, and manage multiple widgets with an intuitive drag-and-drop interface.
+- **Real-time Data**: Automatic data refresh with configurable intervals (10s to 1 hour).
+- **API Integration**: Connect to any JSON API endpoint using a secure server-side proxy.
+- **Field Selection**: Smart field detection and selection for optimal data visualization.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 📊 Widget Types
+- **📈 Cards**: Display key metrics, prices, and KPIs in beautiful card layouts.
+- **📋 Tables**: Sortable, searchable data tables with pagination and filtering.
+- **📊 Charts**: Interactive line, bar, and area charts with real-time updates.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🛡️ Security, Performance & Data Handling
+- **Secure Proxy Server**: All API requests are routed through a server-side proxy. This protects your API keys, avoids CORS issues, and keeps sensitive credentials out of the browser. The proxy also enables you to connect to third-party APIs securely from the frontend.
+- **Caching**: The proxy server implements in-memory caching for API responses, reducing redundant requests and improving dashboard performance. Cached data is served for a short period (e.g., 30 seconds) to ensure both speed and freshness.
+- **Rate Limiting**: Built-in rate limiting on the proxy server helps prevent API abuse and keeps your usage within safe limits.
+- **Data Persistence**: Widget configurations and dashboard layouts are persisted locally (e.g., in localStorage or IndexedDB), so your customizations remain intact even after refreshing or closing the browser.
+- **State Management with Zustand**: FinBoard uses [Zustand](https://github.com/pmndrs/zustand) for lightweight, fast, and scalable state management. All widget states, dashboard layouts, and user preferences are managed efficiently and can be easily persisted.
+- **Error Handling**: Comprehensive error states and loading indicators for robust user experience.
+- **Data Validation**: Smart data parsing and field type detection for reliable visualizations.
 
-## Learn More
+### 🎨 User Experience
+- **Dark/Light Theme**: Seamless theme switching with system preference detection.
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices.
+- **Drag & Drop**: Intuitive widget reordering and layout management.
+- **Search & Filter**: Advanced filtering and search capabilities for tables.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Quick Start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Installation
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repository**
