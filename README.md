@@ -1,8 +1,8 @@
-# FinBoard 
+# FinBoard
 
 **FinBoard** is a customizable, real-time finance dashboard builder that lets you create beautiful data visualizations by connecting to any JSON API. Build your own financial monitoring dashboard with drag-and-drop widgets, real-time data updates, and seamless API integration.
 
-![FinBoard Dashboard](public/groww_img.png)
+
 
 ## ✨ Features
 
@@ -41,3 +41,70 @@
 ### Installation
 
 1. **Clone the repository**
+   ```bash
+   git clone https://github.com/priyanshu082/finboard_groww.git
+   cd finboard_groww
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. **Open your browser**
+   Visit [http://localhost:3000](http://localhost:3000) to view the dashboard.
+
+---
+
+## 🛠️ Usage
+
+1. **Add a Widget**: Click the "Add Widget" button to create a new card, table, or chart. Enter your API endpoint and select the fields you want to visualize.
+2. **Drag & Drop**: Reorder widgets by dragging them around the dashboard.
+3. **Edit or Remove**: Edit widget settings or remove widgets as needed.
+4. **Theme Toggle**: Switch between light and dark mode using the theme toggle in the header.
+5. **Live Updates**: Data refreshes automatically every 30 seconds (configurable per widget).
+
+---
+
+## 📦 Project Structure
+
+- `src/components/` - UI components and widgets
+- `src/lib/` - Utility functions (data formatting, etc.)
+- `src/app/api/proxy/` - Secure API proxy route (handles CORS, caching, rate limiting)
+- `src/store/` - Zustand state management
+- `public/` - Static assets
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to open an issue or submit a pull request.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🙏 Acknowledgements
+
+- [Zustand](https://github.com/pmndrs/zustand)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd)
+
+---
+
+**Made with ❤️ for finance and data enthusiasts.**
