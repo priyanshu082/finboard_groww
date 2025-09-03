@@ -133,6 +133,9 @@ export function TableWidget({ widget }: { widget: any }) {
     return rangeWithDots.filter((item, index, arr) => arr.indexOf(item) === index);
   };
 
+  // Always show pagination if there is any data (even if only 1 page)
+  const shouldShowPagination = processedData.length > 0;
+
   return (
     <div className="col-span-full">
       <Card className="bg-white dark:bg-gray-800 border-0 shadow-sm hover:shadow-md transition-all duration-200">
@@ -309,8 +312,8 @@ export function TableWidget({ widget }: { widget: any }) {
               </table>
             </div>
 
-            {/* Enhanced Pagination */}
-            {totalPages > 1 && (
+            {/* Always show pagination if there is any data */}
+            {shouldShowPagination && (
               <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="text-sm text-gray-600 dark:text-gray-400">
