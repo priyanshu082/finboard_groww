@@ -1,10 +1,6 @@
-import { ModeToggle } from "@/components/ui/ModeToggle";
-import Image from "next/image";
+import { Dashboard } from '@/components/dashboard/Dashboard';
+import { DashboardLayout } from '@/components/dashboard/DashBoardLayout';
 
 export default function Home() {
-  return (
-    <div>
-      <ModeToggle/>
-    </div>
-  );
+  return <DashboardLayout />;
 }
