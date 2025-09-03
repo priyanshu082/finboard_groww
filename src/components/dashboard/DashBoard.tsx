@@ -33,15 +33,15 @@ export function Dashboard() {
   };
 
   const renderWidget = (widget: any) => {
-    const props = { key: widget.id, widget };
+    const props = { widget };
     
     switch (widget.type) {
       case 'card':
-        return <CardWidget {...props} />;
+        return <CardWidget key={widget.id} {...props} />;
       case 'table':
-        return <TableWidget {...props} />;
+        return <TableWidget key={widget.id} {...props} />;
       case 'chart':
-        return <ChartWidget {...props} />;
+        return <ChartWidget key={widget.id} {...props} />;
       default:
         return null;
     }

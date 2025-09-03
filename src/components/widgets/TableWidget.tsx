@@ -14,6 +14,8 @@ import {
 import { useWidgetStore } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue, formatValue } from '@/lib/dataUtils';
 
+const sanitizePath = (p: string) => p.replace(/^\[0\]\.?/, '');
+
 export function TableWidget({ widget }: { widget: any }) {
   const { removeWidget, refreshWidget } = useWidgetStore();
   
@@ -38,7 +40,7 @@ export function TableWidget({ widget }: { widget: any }) {
     if (search.trim()) {
       filtered = filtered.filter(row =>
         widget.selectedFields.some((field: string) => {
-          const value = getFieldValue(row, field);
+          const value = getFieldValue(row, sanitizePath(field));
           return String(value).toLowerCase().includes(search.toLowerCase());
         })
       );
@@ -47,8 +49,8 @@ export function TableWidget({ widget }: { widget: any }) {
     // Sort
     if (sortField) {
       filtered.sort((a, b) => {
-        const aVal = getFieldValue(a, sortField);
-        const bVal = getFieldValue(b, sortField);
+        const aVal = getFieldValue(a, sanitizePath(sortField));
+        const bVal = getFieldValue(b, sanitizePath(sortField));
         
         if (typeof aVal === 'number' && typeof bVal === 'number') {
           return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
@@ -184,7 +186,8 @@ export function TableWidget({ widget }: { widget: any }) {
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                     {widget.selectedFields.map((field: string) => {
-                      const fieldName = field.split('.').pop() || field;
+                      const clean = sanitizePath(field);
+                      const fieldName = clean.split('.').pop() || clean;
                       const isCurrentSort = sortField === field;
                       return (
                         <th key={field} className="text-left p-4 font-medium">
@@ -225,7 +228,7 @@ export function TableWidget({ widget }: { widget: any }) {
                               ? 'font-semibold text-gray-900 dark:text-white' 
                               : 'text-gray-600 dark:text-gray-300'
                           }`}>
-                            {formatValue(getFieldValue(row, field), field)}
+                            {formatValue(getFieldValue(row, sanitizePath(field)), field)}
                           </div>
                         </td>
                       ))}

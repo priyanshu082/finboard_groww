@@ -84,7 +84,7 @@ export function AddWidgetModal({ open, onOpenChange }: AddWidgetModalProps) {
       const response = await apiClient.fetch({
         url: apiUrl
       });
-      
+      console.log(response.data)
       const fields = extractFields(response.data);
       
       setApiTestResult({
