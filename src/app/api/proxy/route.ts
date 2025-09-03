@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
     // Check cache first
     const cached = getCached(cacheKey);
     if (cached) {
+      console.log(`[Proxy] Cache hit for key: ${cacheKey}`);
       return NextResponse.json({
         data: cached,
         cached: true
@@ -93,6 +94,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Make request
+    console.log(`[Proxy] Server hit for URL: ${finalUrl}`);
     const response = await fetch(finalUrl, {
       method: 'GET',
       headers: {
