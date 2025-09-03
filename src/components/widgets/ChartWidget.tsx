@@ -8,7 +8,7 @@ import { RefreshCw, X, MoreVertical, TrendingUp, Activity } from 'lucide-react';
 import { useWidgetStore } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue } from '@/lib/dataUtils';
 
-// Import Recharts
+
 import {
   ResponsiveContainer,
   LineChart,

@@ -56,73 +56,75 @@ export function CardWidget({ widget }: CardWidgetProps) {
         </div>
 
         {/* Content */}
-        {widget.error ? (
-          <div className="py-6">
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/50">
-              <p className="text-red-700 dark:text-red-300 text-sm">{widget.error}</p>
-            </div>
-          </div>
-        ) : widget.isLoading && !widget.data ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-              <RefreshCw className="h-4 w-4 animate-spin" />
-              <span className="text-sm">Loading...</span>
-            </div>
-          </div>
-        ) : widget.data ? (
-          <div className="space-y-4">
-            {widget.selectedFields.map((fieldPath: string, index: number) => {
-              const value = getFieldValue(widget.data, fieldPath);
-              const fieldName = fieldPath.split('.').pop() || fieldPath;
-              
-              return (
-                <div 
-                  key={fieldPath}
-                  className={`${index === 0 ? 'pb-4 mb-4 border-b border-gray-100 dark:border-gray-700' : ''}`}
-                >
-                  {index === 0 ? (
-                    // Primary value - large display
-                    <div className="text-center space-y-2">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                        {formatValue(value, fieldName)}
-                      </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">
-                        {fieldName.replace(/[_-]/g, ' ')}
-                      </div>
-                    </div>
-                  ) : (
-                    // Secondary values - compact display
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-300 capitalize">
-                        {fieldName.replace(/[_-]/g, ' ')}
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {formatValue(value, fieldName)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            
-            {/* Trend indicator for primary value */}
-            {widget.selectedFields.length > 0 && (
-              <div className="flex items-center justify-center gap-1 pt-2">
-                <TrendingUp className="h-4 w-4 text-emerald-500" />
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                  Updated just now
-                </span>
+        <div className="overflow-x-auto">
+          {widget.error ? (
+            <div className="py-6 min-w-[250px]">
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/50">
+                <p className="text-red-700 dark:text-red-300 text-sm">{widget.error}</p>
               </div>
-            )}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <div className="text-gray-400 dark:text-gray-500 mb-2">
-              <TrendingUp className="h-8 w-8 mx-auto opacity-50" />
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">No data available</p>
-          </div>
-        )}
+          ) : widget.isLoading && !widget.data ? (
+            <div className="flex items-center justify-center py-8 min-w-[250px]">
+              <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                <RefreshCw className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Loading...</span>
+              </div>
+            </div>
+          ) : widget.data ? (
+            <div className="space-y-4 min-w-[250px]">
+              {widget.selectedFields.map((fieldPath: string, index: number) => {
+                const value = getFieldValue(widget.data, fieldPath);
+                const fieldName = fieldPath.split('.').pop() || fieldPath;
+                
+                return (
+                  <div 
+                    key={fieldPath}
+                    className={`${index === 0 ? 'pb-4 mb-4 border-b border-gray-100 dark:border-gray-700' : ''}`}
+                  >
+                    {index === 0 ? (
+                      // Primary value - large display
+                      <div className="text-center space-y-2">
+                        <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                          {formatValue(value, fieldName)}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                          {fieldName.replace(/[_-]/g, ' ')}
+                        </div>
+                      </div>
+                    ) : (
+                      // Secondary values - compact display
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600 dark:text-gray-300 capitalize">
+                          {fieldName.replace(/[_-]/g, ' ')}
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {formatValue(value, fieldName)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              
+              {/* Trend indicator for primary value */}
+              {widget.selectedFields.length > 0 && (
+                <div className="flex items-center justify-center gap-1 pt-2">
+                  <TrendingUp className="h-4 w-4 text-emerald-500" />
+                  <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                    Updated just now
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-8 min-w-[250px]">
+              <div className="text-gray-400 dark:text-gray-500 mb-2">
+                <TrendingUp className="h-8 w-8 mx-auto opacity-50" />
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">No data available</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Footer */}

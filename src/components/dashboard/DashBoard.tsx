@@ -11,6 +11,7 @@ import { TableWidget } from '@/components/widgets/TableWidget';
 import { ChartWidget } from '@/components/widgets/ChartWidget';
 import { AddWidgetModal } from './AddWidgetModel';
 import { ModeToggle } from '../ui/ModeToggle';
+import Image from 'next/image';
 
 export function Dashboard() {
   const { widgets, isAddModalOpen, setAddModalOpen, reorderWidgets, refreshWidget } = useWidgetStore();
@@ -54,11 +55,26 @@ export function Dashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center">
-                <Activity className="w-5 h-5 text-white" />
-              </div>
+             
+                <Image
+                  src="/groww_img.png"
+                  alt="Groww Logo"
+                  width={48}
+                  height={48}
+                  className=" object-contain"
+                  priority
+                  style={{ display: 'block' }}
+                />
+             
               <div>
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  FinBoard
+                  <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400 align-middle">
+                    <span className="inline-block px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-full">
+                      Real-time API dashboards
+                    </span>
+                  </span>
+                </h1>
                 <div className="flex items-center space-x-2 mt-1">
                   <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                   <span className="text-xs text-gray-500 dark:text-gray-400">Live updates</span>
