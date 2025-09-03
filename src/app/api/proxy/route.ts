@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Define proper types for cache and rate limiting
 interface CacheEntry {
   data: unknown;
   expires: number;

@@ -219,13 +219,7 @@ export function ChartWidget({ widget }: { widget: Widget }) {
           <div className="space-y-4">
             <SimpleLineChart data={chartData} />
             
-            {/* Trend indicator */}
-            <div className="flex items-center justify-center gap-1 pt-2">
-              <TrendingUp className="h-4 w-4 text-emerald-500" />
-              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                Updated just now
-              </span>
-            </div>
+            
           </div>
         ) : (
           <div className="text-center py-8">

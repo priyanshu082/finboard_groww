@@ -199,13 +199,7 @@ export function CardWidget({ widget }: CardWidgetProps) {
               );
             })}
 
-            {/* Updated indicator */}
-            <div className="flex items-center justify-center gap-1 pt-2">
-              <TrendingUp className="h-4 w-4 text-emerald-500" />
-              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                Updated just now
-              </span>
-            </div>
+            
           </div>
         ) : (
           <div className="text-center py-8">
