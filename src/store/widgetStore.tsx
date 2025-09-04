@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { apiClient } from '@/lib/apiClient';
 
+export type WidgetTheme = 'default' | 'minimal' | 'glass';
+
 export interface Widget {
   id: string;
   name: string;
@@ -10,6 +12,7 @@ export interface Widget {
   apiKey?: string;
   selectedFields: string[];
   refreshInterval: number;
+  theme: WidgetTheme; // Add theme property
   data?: unknown;
   error?: string;
   isLoading?: boolean;
@@ -40,6 +43,7 @@ export const useWidgetStore = create<WidgetStore>()(
       addWidget: (widgetData) => {
         const widget: Widget = {
           ...widgetData,
+          theme: widgetData.theme || 'default', // Default theme
           id: `widget_${Date.now()}_${Math.random().toString(36).slice(2)}`,
           lastUpdated: Date.now(),
           position: get().widgets.length,

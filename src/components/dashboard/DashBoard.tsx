@@ -294,7 +294,7 @@ export function Dashboard() {
           )}
         </div>
 
-        <AddWidgetModal open={isAddModalOpen} onOpenChange={setAddModalOpen} />
+        <AddWidgetModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} />
       </div>
     </div>
   );
