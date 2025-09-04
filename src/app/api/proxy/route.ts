@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Redis } from '@upstash/redis';
 
+// Define proper types for cache and rate limiting
 interface CacheEntry {
   data: unknown;
   expires: number;
@@ -11,220 +11,181 @@ interface RateLimitEntry {
   resetTime: number;
 }
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+interface ApiTestResult {
+  success: boolean;
+  message: string;
+  fields: Array<{
+    path: string;
+    type: string;
+    value: unknown;
+  }>;
+  rawData?: unknown;
+}
 
-const CACHE_TTL = 60 * 1000; // 60 seconds
+// Simple in-memory cache and rate limiting
+const cache = new Map<string, CacheEntry>();
+const rateLimits = new Map<string, RateLimitEntry>();
+
+const CACHE_TTL = 30 * 1000; // 30 seconds
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 60; // per IP per minute
 
 function getClientIP(req: NextRequest): string {
-  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-         req.headers.get('x-real-ip') ||
-         req.headers.get('cf-connecting-ip') ||
+  return req.headers.get('x-forwarded-for')?.split(',')[0] || 
+         req.headers.get('x-real-ip') || 
          'unknown';
 }
 
-function createCacheKey(url: string, apiKey?: string): string {
-  const urlObj = new URL(url);
-  urlObj.searchParams.delete('apikey');
-  urlObj.searchParams.delete('token');
-  urlObj.searchParams.delete('key');
-  const baseKey = `${urlObj.toString()}_${apiKey ? 'with-key' : 'no-key'}`;
-  if (baseKey.length > 250) {
-    const hash = Buffer.from(baseKey).toString('base64').substring(0, 40);
-    return `${baseKey.substring(0, 200)}_${hash}`;
-  }
-  return baseKey;
-}
-
-async function checkRateLimit(ip: string): Promise<boolean> {
-  try {
-    const key = `rate:${ip}`;
-    const now = Date.now();
-    const limit = await redis.get<RateLimitEntry>(key);
-    if (!limit || now > limit.resetTime) {
-      await redis.setex(key, 60, JSON.stringify({ 
-        count: 1, 
-        resetTime: now + RATE_LIMIT_WINDOW 
-      }));
-      return true;
-    }
-    if (limit.count >= MAX_REQUESTS) {
-      return false;
-    }
-    limit.count++;
-    await redis.setex(key, 60, JSON.stringify(limit));
-    return true;
-  } catch (error) {
+function checkRateLimit(clientIP: string): boolean {
+  const now = Date.now();
+  const limit = rateLimits.get(clientIP);
+  
+  if (!limit || now > limit.resetTime) {
+    rateLimits.set(clientIP, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
     return true;
   }
+  
+  if (limit.count >= MAX_REQUESTS) {
+    return false;
+  }
+  
+  limit.count++;
+  return true;
 }
 
-async function getCached(key: string): Promise<unknown | null> {
-  try {
-    const cacheKey = `cache:${key}`;
-    console.log(`[CACHE-KEY] ${cacheKey}`);
-    console.log(`[CACHE-CHECK]`);
-    const cached = await redis.get<CacheEntry>(cacheKey);
-    if (!cached) {
-      console.log(`[CACHE-MISS]`);
-      return null;
-    }
-    const now = Date.now();
-    if (now < cached.expires) {
-      console.log(`[CACHE-HIT]`);
-      return cached.data;
-    }
-    await redis.del(cacheKey);
-    return null;
-  } catch (error) {
+function getCachedResponse(cacheKey: string): unknown | null {
+  const entry = cache.get(cacheKey);
+  if (!entry || Date.now() > entry.expires) {
+    cache.delete(cacheKey);
     return null;
   }
+  return entry.data;
 }
 
-async function setCache(key: string, data: unknown): Promise<void> {
-  try {
-    const cacheKey = `cache:${key}`;
-    const entry: CacheEntry = {
-      data,
-      expires: Date.now() + CACHE_TTL
-    };
-    await redis.setex(cacheKey, 60, JSON.stringify(entry));
-  } catch (error) {
-    // Don't throw - caching failure shouldn't break the request
-  }
+function setCachedResponse(cacheKey: string, data: unknown): void {
+  cache.set(cacheKey, {
+    data,
+    expires: Date.now() + CACHE_TTL
+  });
 }
 
 export async function POST(req: NextRequest) {
-  const startTime = Date.now();
-  const ip = getClientIP(req);
-
-  const rateLimitPassed = await checkRateLimit(ip);
-  if (!rateLimitPassed) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Try again in a minute.' },
-      { status: 429 }
-    );
-  }
-
   try {
-    const body = await req.json();
-    const { url, apiKey } = body as { url?: string; apiKey?: string };
-
-    if (!url || typeof url !== 'string') {
+    const clientIP = getClientIP(req);
+    
+    // Rate limiting
+    if (!checkRateLimit(clientIP)) {
       return NextResponse.json(
-        { error: 'Valid URL required' },
+        { error: 'Rate limit exceeded. Please try again later.' },
+        { status: 429 }
+      );
+    }
+    
+    const body = await req.json() as { url: string; apiKey?: string; headers?: Record<string, string> };
+    const { url, apiKey, headers = {} } = body;
+    
+    if (!url) {
+      return NextResponse.json(
+        { error: 'URL is required' },
         { status: 400 }
       );
     }
-
+    
+    // Validate URL
+    let parsedUrl: URL;
     try {
-      new URL(url);
+      parsedUrl = new URL(url);
     } catch {
       return NextResponse.json(
         { error: 'Invalid URL format' },
         { status: 400 }
       );
     }
-
-    const cacheKey = createCacheKey(url, apiKey);
-    console.log(`[CACHE-KEY] ${cacheKey}`);
-    const cached = await getCached(cacheKey);
-    if (cached) {
-      const processingTime = Date.now() - startTime;
-      console.log(`[CACHE-RESPONSE]`);
-      return NextResponse.json({
-        data: cached,
-        cached: true
-      });
-    }
-
-    let finalUrl = url;
-    if (apiKey) {
-      const urlObj = new URL(url);
-      if (!urlObj.searchParams.has('apikey') && !urlObj.searchParams.has('token')) {
-        urlObj.searchParams.set('apikey', apiKey);
-      }
-      finalUrl = urlObj.toString();
-    }
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, 10000);
-
-    const response = await fetch(finalUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'API-Proxy/1.0'
-      },
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json() as unknown;
-    setCache(cacheKey, data).catch(() => {});
-
-    return NextResponse.json({
-      data,
-      cached: false
-    });
-
-  } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
+    
+    // Security: Block localhost and private IPs
+    const hostname = parsedUrl.hostname;
+    if (hostname === 'localhost' || 
+        hostname === '127.0.0.1' || 
+        hostname.startsWith('192.168.') || 
+        hostname.startsWith('10.') || 
+        hostname.startsWith('172.')) {
       return NextResponse.json(
-        { error: 'Request timeout' },
-        { status: 408 }
+        { error: 'Access to localhost and private networks is not allowed' },
+        { status: 403 }
       );
     }
+    
+    // Check cache
+    const cacheKey = `${url}:${JSON.stringify(headers)}`;
+    const cachedData = getCachedResponse(cacheKey);
+    if (cachedData) {
+      return NextResponse.json({ data: cachedData, cached: true });
+    }
+    
+    // Prepare headers
+    const requestHeaders: Record<string, string> = {
+      'User-Agent': 'FinBoard/1.0',
+      'Accept': 'application/json',
+      ...headers
+    };
+    
+    if (apiKey) {
+      requestHeaders['Authorization'] = `Bearer ${apiKey}`;
+    }
+    
+    // Make request
+    const startTime = Date.now();
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: requestHeaders,
+      signal: AbortSignal.timeout(10000) // 10 second timeout
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      return NextResponse.json(
+        { error: `API request failed: ${response.status} ${response.statusText}` },
+        { status: response.status }
+      );
+    }
+    
+    const data = await response.json();
+    
+    // Cache successful response
+    setCachedResponse(cacheKey, data);
+    
+    return NextResponse.json({ data, cached: false });
+    
+  } catch (error) {
+    console.error('Proxy error:', error);
+    
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        return NextResponse.json(
+          { error: 'Request timeout' },
+          { status: 408 }
+        );
+      }
+      
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch data' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const action = searchParams.get('action');
-
-  if (action === 'debug') {
-    try {
-      const pingResult = await redis.ping();
-      const debugInfo = {
-        redis_ping: pingResult,
-        timestamp: new Date().toISOString(),
-        cache_ttl: CACHE_TTL / 1000,
-        rate_limit_window: RATE_LIMIT_WINDOW / 1000,
-        max_requests: MAX_REQUESTS
-      };
-      return NextResponse.json(debugInfo);
-    } catch (error) {
-      return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
-    }
-  }
-
-  try {
-    const pingResult = await redis.ping();
-    return NextResponse.json({ 
-      status: 'healthy', 
-      redis: 'connected',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    return NextResponse.json({ 
-      status: 'unhealthy', 
-      redis: 'disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 503 });
-  }
+// Health check endpoint
+export async function GET() {
+  return NextResponse.json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    cacheSize: cache.size,
+    rateLimitEntries: rateLimits.size
+  });
 }

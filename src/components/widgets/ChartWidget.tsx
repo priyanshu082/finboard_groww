@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { WidgetWrapper } from '../Theme/WidgetWrapper';
+import { ContemporaryWidgetWrapper } from '../Theme/ContemporaryWidgetWrapperProps';
+import { CorporateWidgetWrapper } from '../Theme/CorporateWidgetWrapperProps';
+import { ModernWidgetWrapper } from '../Theme/ModernWidgetWrapper';
 import { Activity } from 'lucide-react';
 import { Widget } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue } from '@/lib/dataUtils';
@@ -134,14 +136,8 @@ export function ChartWidget({ widget }: { widget: Widget }) {
   const previousValue = chartData[chartData.length - 2]?.value || 0;
   const changePercent = previousValue ? ((currentValue - previousValue) / previousValue * 100) : 0;
 
-  return (
-    <WidgetWrapper 
-      widget={widget}
-      showTrend={chartData.length > 1}
-      trendValue={changePercent}
-      primaryValue={currentValue.toLocaleString()}
-      primaryLabel="Current Value"
-    >
+  const renderContent = () => (
+    <>
       {chartData.length > 1 ? (
         <div className="space-y-4">
           <SimpleLineChart data={chartData} />
@@ -154,6 +150,46 @@ export function ChartWidget({ widget }: { widget: Widget }) {
           <p className="text-sm text-gray-500 dark:text-gray-400">Connect data source to see chart</p>
         </div>
       )}
-    </WidgetWrapper>
+    </>
   );
+
+  // Render appropriate wrapper based on theme
+  switch (widget.theme) {
+    case 'minimal':
+      return (
+        <ContemporaryWidgetWrapper 
+          widget={widget}
+          showTrend={chartData.length > 1}
+          trendValue={changePercent}
+          primaryValue={currentValue.toLocaleString()}
+          primaryLabel="Current Value"
+        >
+          {renderContent()}
+        </ContemporaryWidgetWrapper>
+      );
+    case 'glass':
+      return (
+        <CorporateWidgetWrapper 
+          widget={widget}
+          showTrend={chartData.length > 1}
+          trendValue={changePercent}
+          primaryValue={currentValue.toLocaleString()}
+          primaryLabel="Current Value"
+        >
+          {renderContent()}
+        </CorporateWidgetWrapper>
+      );
+    default:
+      return (
+        <ModernWidgetWrapper 
+          widget={widget}
+          showTrend={chartData.length > 1}
+          trendValue={changePercent}
+          primaryValue={currentValue.toLocaleString()}
+          primaryLabel="Current Value"
+        >
+          {renderContent()}
+        </ModernWidgetWrapper>
+      );
+  }
 }

@@ -1,10 +1,9 @@
 'use client';
-
 import React from 'react';
 import { Activity } from 'lucide-react';
-import { WidgetWrapper } from '../Theme/WidgetWrapper';
-import { WidgetWrapperMinimal } from '../Theme/WidgetWrapperMinimal';
-import { WidgetWrapperGlass } from '../Theme/WidgetWrapperGlass';
+  import { ContemporaryWidgetWrapper } from '../Theme/ContemporaryWidgetWrapperProps';
+  import { CorporateWidgetWrapper } from '../Theme/CorporateWidgetWrapperProps';
+  import { ModernWidgetWrapper } from '../Theme/ModernWidgetWrapper';
 import { getFieldValue, formatValue } from '@/lib/dataUtils';
 import { Widget } from '@/store/widgetStore';
 
@@ -69,21 +68,21 @@ export function CardWidget({ widget }: CardWidgetProps) {
   switch (widget.theme) {
     case 'minimal':
       return (
-        <WidgetWrapperMinimal widget={widget}>
+        <ContemporaryWidgetWrapper widget={widget}>
           {renderContent()}
-        </WidgetWrapperMinimal>
+        </ContemporaryWidgetWrapper>
       );
     case 'glass':
       return (
-        <WidgetWrapperGlass widget={widget}>
+        <CorporateWidgetWrapper widget={widget}>
           {renderContent()}
-        </WidgetWrapperGlass>
+        </CorporateWidgetWrapper>
       );
     default:
       return (
-        <WidgetWrapper widget={widget}>
+        <ModernWidgetWrapper widget={widget}>
           {renderContent()}
-        </WidgetWrapper>
+        </ModernWidgetWrapper>
       );
   }
 }

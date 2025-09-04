@@ -10,6 +10,17 @@ import { CheckCircle, AlertCircle } from 'lucide-react';
 import { apiClient } from '@/lib/apiClient';
 import { extractFields } from '@/lib/dataUtils';
 
+interface ApiTestResult {
+  success: boolean;
+  message: string;
+  fields: Array<{
+    path: string;
+    type: string;
+    value: unknown;
+  }>;
+  rawData?: unknown;
+}
+
 interface ConfigureTabProps {
   widgetName: string;
   setWidgetName: (name: string) => void;
@@ -19,8 +30,8 @@ interface ConfigureTabProps {
   setRefreshInterval: (interval: number) => void;
   displayMode: 'card' | 'table' | 'chart';
   setDisplayMode: (mode: 'card' | 'table' | 'chart') => void;
-  apiTestResult: any;
-  setApiTestResult: (result: any) => void;
+  apiTestResult: ApiTestResult | null;
+  setApiTestResult: (result: ApiTestResult | null) => void;
   setCurrentTab: (tab: string) => void;
 }
 

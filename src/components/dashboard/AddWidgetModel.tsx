@@ -10,6 +10,17 @@ import { ConfigureTab } from './tabs/ConfigureTab';
 import { ThemeTab } from './tabs/ThemeTab';
 import { FieldsTab } from './tabs/FieldsTab';
 
+interface ApiTestResult {
+  success: boolean;
+  message: string;
+  fields: Array<{
+    path: string;
+    type: string;
+    value: unknown;
+  }>;
+  rawData?: unknown;
+}
+
 interface AddWidgetModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,7 +37,7 @@ export function AddWidgetModal({ isOpen, onClose }: AddWidgetModalProps) {
   const [selectedTheme, setSelectedTheme] = useState<WidgetTheme>('default');
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [currentTab, setCurrentTab] = useState('configure');
-  const [apiTestResult, setApiTestResult] = useState<any>(null);
+  const [apiTestResult, setApiTestResult] = useState<ApiTestResult | null>(null);
 
   const handleSubmit = () => {
     if (!widgetName || !apiUrl || selectedFields.length === 0) return;

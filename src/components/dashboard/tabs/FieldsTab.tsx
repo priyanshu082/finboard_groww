@@ -9,13 +9,26 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Plus, X, Search } from 'lucide-react';
 
+interface FieldInfo {
+  path: string;
+  type: string;
+  value: unknown;
+}
+
+interface ApiTestResult {
+  success: boolean;
+  message: string;
+  fields: FieldInfo[];
+  rawData?: unknown;
+}
+
 interface FieldsTabProps {
-  apiTestResult: any;
+  apiTestResult: ApiTestResult | null;
   selectedFields: string[];
   setSelectedFields: (fields: string[]) => void;
 }
 
-function getUniqueKey(field: any, idx: number) {
+function getUniqueKey(field: FieldInfo, idx: number) {
   return `${field.path}__${field.type}__${idx}`;
 }
 
@@ -35,7 +48,7 @@ export function FieldsTab({ apiTestResult, selectedFields, setSelectedFields }: 
     setSelectedFields(selectedFields.filter((f) => f !== fieldPath));
   };
 
-  const filteredFields = apiTestResult?.fields?.filter((field: any) => {
+  const filteredFields = apiTestResult?.fields?.filter((field: FieldInfo) => {
     const matchesSearch = !fieldSearch || field.path.toLowerCase().includes(fieldSearch.toLowerCase());
     const matchesArrayFilter = !showArraysOnly || field.type === 'array';
     return matchesSearch && matchesArrayFilter;
@@ -87,7 +100,7 @@ export function FieldsTab({ apiTestResult, selectedFields, setSelectedFields }: 
             </div>
           ) : (
             <div className="divide-y divide-gray-100 dark:divide-gray-700">
-              {filteredFields.map((field: any, idx: number) => (
+              {filteredFields.map((field: FieldInfo, idx: number) => (
                 <div
                   key={getUniqueKey(field, idx)}
                   className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
