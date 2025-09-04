@@ -20,14 +20,14 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://finboard.vercel.app'), // Replace with your actual domain
+  metadataBase: new URL('https://finboard-groww-rose.vercel.app/'), // Updated to new domain
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://finboard.vercel.app', // Replace with your actual domain
+    url: 'https://finboard-groww-rose.vercel.app/', // Updated to new domain
     title: 'FinBoard - Real-time Finance Dashboard',
     description: 'Create customizable real-time finance dashboards by connecting to various financial APIs. Monitor stocks, crypto, and market data with drag-and-drop widgets.',
     siteName: 'FinBoard',

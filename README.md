@@ -1,4 +1,4 @@
-# FinBoard
+ # FinBoard
 
 **FinBoard** is a customizable, real-time finance dashboard builder that lets you create beautiful data visualizations by connecting to any JSON API. Build your own financial monitoring dashboard with drag-and-drop widgets, real-time data updates, and seamless API integration.
 
@@ -14,46 +14,19 @@
 
 ### 📊 Widget Types
 - **📈 Cards**: Display key metrics, prices, and KPIs in beautiful card layouts.
-- **📋 Tables**: Sortable, searchable data tables with pagination and filtering.
+- ** Tables**: Sortable, searchable data tables with pagination and filtering.
 - **📊 Charts**: Interactive line, bar, and area charts with real-time updates.
 
-### 🛡️ Security, Performance & Data Handling
+### **Theme System** (NEW!)
+- **Multiple Widget Themes**: Choose from 3 professional themes for each widget
+  - **Classic Theme**: Clean and professional design with emerald accents
+  - **Minimal Theme**: Modern glassmorphism with subtle gradients
+  - **Glass Theme**: Premium frosted glass effect with enhanced depth
+- **Theme Customization**: Each widget can have its own theme independent of others
+- **Light/Dark Mode**: All themes adapt beautifully to both light and dark modes
+- **Consistent Design Language**: Uniform spacing, typography, and visual hierarchy across all themes
 
-**Key Highlights:**
-
-- **🔒 Secure Proxy Server**
-  - All API requests go through a server-side proxy.
-  - Protects your API keys and sensitive credentials.
-  - Solves CORS issues and enables secure frontend-to-API communication.
-
-- **⚡ In-Memory Caching**
-  - Proxy server caches API responses for ~30 seconds.
-  - Reduces redundant requests and boosts dashboard speed.
-  - Ensures data is both fresh and fast.
-
-- **🚦 Rate Limiting**
-  - Proxy server enforces per-IP rate limits.
-  - Prevents API abuse and keeps usage within safe limits.
-
-- **💾 Data Persistence**
-  - Widget setups and dashboard layouts are saved locally (localStorage/IndexedDB).
-  - Your customizations stay even after refresh or browser restart.
-
-- **🗂️ State Management (Zustand)**
-  - Uses [Zustand](https://github.com/pmndrs/zustand) for fast, scalable state management.
-  - Efficiently manages widget states, layouts, and user preferences.
-
-- **🛑 Robust Error Handling**
-  - Clear error states and loading indicators for a smooth user experience.
-
-- **🧠 Smart Data Validation**
-  - Automatic data parsing and field type detection for reliable, accurate visualizations.
-
-### 🎨 User Experience
-- **Dark/Light Theme**: Seamless theme switching with system preference detection.
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices.
-- **Drag & Drop**: Intuitive widget reordering and layout management.
-- **Search & Filter**: Advanced filtering and search capabilities for tables.
+![Widget Theme Selection](public/widgetTheme.png)
 
 ### 🛡️ Security, Performance & Data Handling
 
@@ -64,10 +37,11 @@
   - Protects your API keys and sensitive credentials.
   - Solves CORS issues and enables secure frontend-to-API communication.
 
-- **⚡ In-Memory Caching**
-  - Proxy server caches API responses for ~30 seconds.
-  - Reduces redundant requests and boosts dashboard speed.
-  - Ensures data is both fresh and fast.
+- **⚡ Redis Caching (Production Ready)**
+  - Integrated with Upstash Redis for production deployment.
+  - Distributed caching across multiple server instances.
+  - Cache persistence survives server restarts.
+  - Enhanced performance and scalability.
 
 - **🚦 Rate Limiting**
   - Proxy server enforces per-IP rate limits.
@@ -126,7 +100,7 @@
 
 ---
 
-## 🛠️ Usage
+##️ Usage
 
 1. **Add a Widget**: Click the "Add Widget" button to create a new card, table, or chart. Enter your API endpoint and select the fields you want to visualize.
 
@@ -148,54 +122,25 @@
 
 ## 🏗️ Production Deployment
 
-### Redis Implementation for Production
+### Redis Integration with Upstash
 
-For production environments, the proxy server supports Redis caching for enhanced performance and scalability:
+FinBoard is production-ready with **Upstash Redis** integration for enhanced performance and scalability:
 
-```typescript
-// Production Redis Configuration
-const redis = new Redis({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-  password: process.env.REDIS_PASSWORD,
-  db: parseInt(process.env.REDIS_DB || '0'),
-});
+![Redis Integration](public/redis.png)
 
-// Caching with Redis
-async function getCachedResponse(cacheKey: string): Promise<unknown | null> {
-  try {
-    const cached = await redis.get(cacheKey);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed.expires > Date.now()) {
-        return parsed.data;
-      }
-      await redis.del(cacheKey);
-    }
-  } catch (error) {
-    console.error('Redis cache read error:', error);
-  }
-  return null;
-}
-```
-
-**Benefits of Redis in Production:**
+**Production Benefits:**
 - **Distributed Caching**: Share cache across multiple server instances
 - **Persistence**: Cache survives server restarts
 - **Memory Efficiency**: Better memory management than in-memory caching
 - **Scalability**: Handle high traffic with distributed cache
 - **Advanced Features**: TTL, pub/sub, and clustering support
 
-![Redis Integration](public/redis.png)
-
 ### Environment Variables for Production
 
 ```bash
-# Redis Configuration
-REDIS_HOST=your-redis-host
-REDIS_PORT=6379
-REDIS_PASSWORD=your-redis-password
-REDIS_DB=0
+# Upstash Redis Configuration
+UPSTASH_REDIS_REST_URL=your-upstash-redis-url
+UPSTASH_REDIS_REST_TOKEN=your-upstash-redis-token
 
 # API Configuration
 API_RATE_LIMIT=100
@@ -250,13 +195,14 @@ This project is licensed under the MIT License.
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 - [Zustand](https://github.com/pmndrs/zustand)
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [React Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd)
 - [Recharts](https://recharts.org/) for chart components
+- [Upstash Redis](https://upstash.com/) for production caching
 
 ---
 
