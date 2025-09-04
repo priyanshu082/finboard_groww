@@ -47,7 +47,7 @@ export function WidgetWrapper({
 
   if (widget.isLoading && !widget.data) {
     return (
-      <Card className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-900 dark:to-gray-800 border border-emerald-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl">
+      <Card className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-900 dark:to-gray-800 border border-emerald-200 dark:border-gray-700 transition-all duration-200 rounded-xl">
         <div className="p-5">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
             <div className="flex-1">
@@ -77,7 +77,7 @@ export function WidgetWrapper({
   }
 
   return (
-    <Card className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-900 dark:to-gray-800 border border-emerald-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl overflow-hidden">
+    <Card className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-gray-900 dark:to-gray-800 border border-emerald-200 dark:border-gray-700 transition-all duration-200 rounded-xl overflow-hidden">
       {/* Header */}
       <div className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">

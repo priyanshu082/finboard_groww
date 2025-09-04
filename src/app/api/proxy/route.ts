@@ -11,17 +11,6 @@ interface RateLimitEntry {
   resetTime: number;
 }
 
-interface ApiTestResult {
-  success: boolean;
-  message: string;
-  fields: Array<{
-    path: string;
-    type: string;
-    value: unknown;
-  }>;
-  rawData?: unknown;
-}
-
 // Simple in-memory cache and rate limiting
 const cache = new Map<string, CacheEntry>();
 const rateLimits = new Map<string, RateLimitEntry>();
@@ -134,7 +123,6 @@ export async function POST(req: NextRequest) {
     }
     
     // Make request
-    const startTime = Date.now();
     const response = await fetch(url, {
       method: 'GET',
       headers: requestHeaders,
@@ -144,7 +132,7 @@ export async function POST(req: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text();
       return NextResponse.json(
-        { error: `API request failed: ${response.status} ${response.statusText}` },
+        { error: `API request failed: ${response.status} ${response.statusText} - ${errorText.slice(0, 200)}` },
         { status: response.status }
       );
     }

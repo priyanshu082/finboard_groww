@@ -1,0 +1,32 @@
+export const cardSamples = {
+  cryptoOverview: {
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    price: 67345.12,
+    changePercent24h: 2.35,
+    volume24h: 289345678.23,
+    marketCap: 130456789012.12,
+    high24h: 68120.23,
+    low24h: 65900.5,
+    updatedAt: Date.now(),
+  },
+  stockKPI: {
+    name: 'Apple Inc.',
+    symbol: 'AAPL',
+    price: 192.45,
+    changePercent: -0.84,
+    peRatio: 31.8,
+    dividendYield: 0.48,
+    marketCap: 2978000000000,
+    updatedAt: Date.now(),
+  },
+  bankAccount: {
+    accountName: 'Savings Account',
+    accountNumber: '**** 4321',
+    balance: 25430.76,
+    changeMonthlyPercent: 1.92,
+    lastDeposit: 1500,
+    lastWithdrawal: 200,
+    updatedAt: Date.now(),
+  },
+};

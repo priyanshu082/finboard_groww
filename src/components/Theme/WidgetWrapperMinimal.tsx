@@ -47,7 +47,7 @@ export function WidgetWrapperMinimal({
 
   if (widget.isLoading && !widget.data) {
     return (
-      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-950 dark:to-slate-900 border-l-4 border-l-purple-500 dark:border-l-purple-400 border-r-0 border-t-0 border-b-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-r-xl rounded-l-none">
+      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-950 dark:to-slate-900 border-l-4 border-l-purple-500 dark:border-l-purple-400 border-r-0 border-t-0 border-b-0 transition-all duration-300 rounded-r-xl rounded-l-none">
         <div className="p-5">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
             <div className="flex-1">
@@ -77,7 +77,7 @@ export function WidgetWrapperMinimal({
   }
 
   return (
-    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-950 dark:to-slate-900 border-l-4 border-l-purple-500 dark:border-l-purple-400 border-r-0 border-t-0 border-b-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-r-xl rounded-l-none">
+    <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-950 dark:to-slate-900 border-l-4 border-l-purple-500 dark:border-l-purple-400 border-r-0 border-t-0 border-b-0 transition-all duration-300 rounded-r-xl rounded-l-none">
       {/* Header */}
       <div className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">

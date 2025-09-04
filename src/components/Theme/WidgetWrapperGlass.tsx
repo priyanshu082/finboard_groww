@@ -47,7 +47,7 @@ export function WidgetWrapperGlass({
 
   if (widget.isLoading && !widget.data) {
     return (
-      <Card className="bg-gradient-to-br from-blue-50/80 via-white/90 to-indigo-50/80 dark:from-slate-800/90 dark:via-slate-700/90 dark:to-blue-900/90 backdrop-blur-md border border-blue-200/50 dark:border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl">
+      <Card className="bg-gradient-to-br from-blue-50/80 via-white/90 to-indigo-50/80 dark:from-slate-800/90 dark:via-slate-700/90 dark:to-blue-900/90 backdrop-blur-md border border-blue-200/50 dark:border-slate-600/50 transition-all duration-500 rounded-2xl">
         <div className="p-5">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
             <div className="flex-1">
@@ -77,19 +77,19 @@ export function WidgetWrapperGlass({
   }
 
   return (
-    <Card className="bg-gradient-to-br from-blue-50/80 via-white/90 to-indigo-50/80 dark:from-slate-800/90 dark:via-slate-700/90 dark:to-blue-900/90 backdrop-blur-md border border-blue-200/50 dark:border-slate-600/50 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl overflow-hidden">
+    <Card className="bg-gradient-to-br from-blue-50/80 via-white/90 to-indigo-50/80 dark:from-slate-800/90 dark:via-slate-700/90 dark:to-blue-900/90 backdrop-blur-md border border-blue-200/50 dark:border-slate-600/50 transition-all duration-500 rounded-2xl overflow-hidden">
       {/* Decorative gradient line */}
       <div className="h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
       
       {/* Header */}
-      <div className="relative p-5">
+      <div className="relative px-5">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
-        <div className="relative flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
+        <div className="relative flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-2">
           <div className="flex-1">
-            <h3 className="font-bold text-xl bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent mb-3 leading-tight">{widget.name}</h3>
+            <h3 className="font-bold text-xl bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent mb-2 leading-tight">{widget.name}</h3>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="flex items-center gap-2">
-                <div className={`w-2.5 h-2.5 rounded-full ${widget.error ? 'bg-rose-500 shadow-lg shadow-rose-500/30' : 'bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse'}`}></div>
+                <div className={`w-2.5 h-2.5 rounded-full ${widget.error ? 'bg-rose-500' : 'bg-emerald-500 animate-pulse'}`}></div>
                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                   {widget.error ? 'Connection failed' : 'Live data'}
                 </span>
