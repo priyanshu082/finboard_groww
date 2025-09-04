@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { ContemporaryWidgetWrapper } from '../Theme/ContemporaryWidgetWrapperProps';
-import { CorporateWidgetWrapper } from '../Theme/CorporateWidgetWrapperProps';
-import { ModernWidgetWrapper } from '../Theme/ModernWidgetWrapper';
+import { WidgetWrapperMinimal } from '../Theme/WidgetWrapperMinimal';
+import { WidgetWrapperGlass } from '../Theme/WidgetWrapperGlass';
+import {  WidgetWrapper } from '../Theme/WidgetWrapper';
 import { Activity } from 'lucide-react';
 import { Widget } from '@/store/widgetStore';
 import { normalizeToRows, getFieldValue } from '@/lib/dataUtils';
@@ -157,7 +157,7 @@ export function ChartWidget({ widget }: { widget: Widget }) {
   switch (widget.theme) {
     case 'minimal':
       return (
-        <ContemporaryWidgetWrapper 
+        <WidgetWrapperMinimal 
           widget={widget}
           showTrend={chartData.length > 1}
           trendValue={changePercent}
@@ -165,11 +165,11 @@ export function ChartWidget({ widget }: { widget: Widget }) {
           primaryLabel="Current Value"
         >
           {renderContent()}
-        </ContemporaryWidgetWrapper>
+        </WidgetWrapperMinimal>
       );
     case 'glass':
       return (
-        <CorporateWidgetWrapper 
+        <WidgetWrapperGlass 
           widget={widget}
           showTrend={chartData.length > 1}
           trendValue={changePercent}
@@ -177,11 +177,11 @@ export function ChartWidget({ widget }: { widget: Widget }) {
           primaryLabel="Current Value"
         >
           {renderContent()}
-        </CorporateWidgetWrapper>
+        </WidgetWrapperGlass>
       );
     default:
       return (
-        <ModernWidgetWrapper 
+        <WidgetWrapper 
           widget={widget}
           showTrend={chartData.length > 1}
           trendValue={changePercent}
@@ -189,7 +189,7 @@ export function ChartWidget({ widget }: { widget: Widget }) {
           primaryLabel="Current Value"
         >
           {renderContent()}
-        </ModernWidgetWrapper>
+          </WidgetWrapper>
       );
   }
 }

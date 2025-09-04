@@ -8,9 +8,9 @@ import {
   Search, ArrowUpDown, ChevronLeft, ChevronRight, 
   SortAsc, SortDesc, Database, AlertTriangle, ChevronsLeft, ChevronsRight 
 } from 'lucide-react';
-import { ContemporaryWidgetWrapper } from '../Theme/ContemporaryWidgetWrapperProps';
-import { CorporateWidgetWrapper } from '../Theme/CorporateWidgetWrapperProps';
-import { ModernWidgetWrapper } from '../Theme/ModernWidgetWrapper';
+import { WidgetWrapperMinimal } from '../Theme/WidgetWrapperMinimal';
+import { WidgetWrapperGlass } from '../Theme/WidgetWrapperGlass';
+import {  WidgetWrapper } from '../Theme/WidgetWrapper';
 import { normalizeToRows, getFieldValue, formatValue } from '@/lib/dataUtils';
 import { Widget } from '@/store/widgetStore';
 
@@ -375,25 +375,25 @@ export function TableWidget({ widget }: { widget: Widget }) {
     case 'minimal':
       return (
         <div className="col-span-full">
-          <ContemporaryWidgetWrapper widget={widget}>
+          <WidgetWrapperMinimal widget={widget}>
             {renderContent()}
-          </ContemporaryWidgetWrapper>
+          </WidgetWrapperMinimal>
         </div>
       );
     case 'glass':
       return (
         <div className="col-span-full">
-          <CorporateWidgetWrapper widget={widget}>
+          <WidgetWrapperGlass widget={widget}>
             {renderContent()}
-          </CorporateWidgetWrapper>
+          </WidgetWrapperGlass>
         </div>
       );
     default:
       return (
         <div className="col-span-full">
-          <ModernWidgetWrapper widget={widget}>
+          <WidgetWrapper widget={widget}>
             {renderContent()}
-          </ModernWidgetWrapper>
+          </ WidgetWrapper>
         </div>
       );
   }

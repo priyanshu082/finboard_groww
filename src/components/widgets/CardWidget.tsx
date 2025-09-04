@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import { Activity } from 'lucide-react';
-  import { ContemporaryWidgetWrapper } from '../Theme/ContemporaryWidgetWrapperProps';
-  import { CorporateWidgetWrapper } from '../Theme/CorporateWidgetWrapperProps';
-  import { ModernWidgetWrapper } from '../Theme/ModernWidgetWrapper';
+import { WidgetWrapperMinimal } from '../Theme/WidgetWrapperMinimal';
+import { WidgetWrapperGlass } from '../Theme/WidgetWrapperGlass';
+import {  WidgetWrapper } from '../Theme/WidgetWrapper';
 import { getFieldValue, formatValue } from '@/lib/dataUtils';
 import { Widget } from '@/store/widgetStore';
 
@@ -19,7 +19,6 @@ export function CardWidget({ widget }: CardWidgetProps) {
           {widget.selectedFields.map((fieldPath, index) => {
             const value = getFieldValue(widget.data, fieldPath);
             const formattedValue = formatValue(value, fieldPath);
-
             const numericValue = typeof value === 'number' ? value :
               typeof value === 'string' ? parseFloat(value) : 0;
 
@@ -32,7 +31,7 @@ export function CardWidget({ widget }: CardWidgetProps) {
                   <div className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate mb-1">
                     {fieldPath.split('.').pop()?.replace(/([A-Z])/g, ' $1').trim() || fieldPath}
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
+                  <div className="text-sm font-bold text-gray-900 dark:text-white leading-tight">
                     {formattedValue}
                   </div>
                 </div>
@@ -68,21 +67,21 @@ export function CardWidget({ widget }: CardWidgetProps) {
   switch (widget.theme) {
     case 'minimal':
       return (
-        <ContemporaryWidgetWrapper widget={widget}>
+        <WidgetWrapperMinimal widget={widget}>
           {renderContent()}
-        </ContemporaryWidgetWrapper>
+        </WidgetWrapperMinimal>
       );
     case 'glass':
       return (
-        <CorporateWidgetWrapper widget={widget}>
+        <WidgetWrapperGlass widget={widget}>
           {renderContent()}
-        </CorporateWidgetWrapper>
+        </WidgetWrapperGlass>
       );
     default:
       return (
-        <ModernWidgetWrapper widget={widget}>
+        <WidgetWrapper widget={widget}>
           {renderContent()}
-        </ModernWidgetWrapper>
+        </WidgetWrapper>
       );
   }
 }

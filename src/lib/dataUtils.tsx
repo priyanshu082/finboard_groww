@@ -48,10 +48,10 @@ export function isDateLike(value: unknown): boolean {
 }
 
 /**
- * Extract fields from data with smart prioritization
+ * Extract fields from data with smart prioritization (depth up to 3)
  */
 export function extractFields(data: unknown, prefix = '', depth = 0): FieldInfo[] {
-  if (depth > 2 || data === null || data === undefined) return [];
+  if (depth > 3 || data === null || data === undefined) return [];
 
   const fields: FieldInfo[] = [];
 
@@ -64,8 +64,8 @@ export function extractFields(data: unknown, prefix = '', depth = 0): FieldInfo[
       priority: 8
     });
 
-    // Extract from first element if it's an object
-    if (data.length > 0 && typeof data[0] === 'object' && data[0] !== null && depth < 1) {
+    // Extract from first element if it's an object (up to depth 2)
+    if (data.length > 0 && typeof data[0] === 'object' && data[0] !== null && depth < 2) {
       fields.push(...extractFields(data[0], prefix ? `${prefix}[0]` : '[0]', depth + 1));
     }
     return fields;
@@ -76,7 +76,7 @@ export function extractFields(data: unknown, prefix = '', depth = 0): FieldInfo[
     const objData = data as Record<string, unknown>;
     const keys = Object.keys(objData)
       .sort((a, b) => getFieldPriority(b) - getFieldPriority(a))
-      .slice(0, depth === 0 ? 20 : 10); // Limit fields
+      .slice(0, depth === 0 ? 25 : depth === 1 ? 15 : 10); // More fields for deeper levels
 
     keys.forEach(key => {
       const value = objData[key];
@@ -95,8 +95,8 @@ export function extractFields(data: unknown, prefix = '', depth = 0): FieldInfo[
 
       fields.push(fieldInfo);
 
-      // Recurse into objects and arrays (limited depth)
-      if (depth < 1 && value !== null &&
+      // Recurse into objects and arrays (up to depth 3)
+      if (depth < 3 && value !== null &&
           (typeof value === 'object' || Array.isArray(value))) {
         fields.push(...extractFields(value, path, depth + 1));
       }
