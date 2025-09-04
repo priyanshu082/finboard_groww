@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { RefreshCw, X, MoreVertical, TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react';
+import { RefreshCw, X, TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react';
 import { useWidgetStore } from '@/store/widgetStore';
 import { getFieldValue, formatValue } from '@/lib/dataUtils';
 
@@ -26,6 +25,14 @@ interface CardWidgetProps {
 
 export function CardWidget({ widget }: CardWidgetProps) {
   const { removeWidget, refreshWidget } = useWidgetStore();
+  const [isRotating, setIsRotating] = useState(false);
+
+  const handleRefresh = (id: string) => {
+    setIsRotating(true);
+    Promise.resolve(refreshWidget(id)).finally(() => {
+      setTimeout(() => setIsRotating(false), 800); // keep spinning for a short time
+    });
+  };
 
   const getTrendIcon = (value: number) => {
     if (value > 0) return <TrendingUp className="h-3 w-3 text-emerald-500" />;
@@ -50,7 +57,26 @@ export function CardWidget({ widget }: CardWidgetProps) {
                 <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
               </div>
             </div>
-            <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                onClick={() => handleRefresh(widget.id)}
+                aria-label="Refresh"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRotating ? 'animate-spin' : ''}`} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400"
+                onClick={() => removeWidget(widget.id)}
+                aria-label="Remove"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
         <div className="px-5 pb-5">
@@ -81,27 +107,26 @@ export function CardWidget({ widget }: CardWidgetProps) {
                 </div>
               </div>
             </div>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-36">
-                <DropdownMenuItem onClick={() => refreshWidget(widget.id)} className="text-sm">
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => removeWidget(widget.id)}
-                  className="text-sm text-red-600 dark:text-red-400"
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Remove
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                onClick={() => handleRefresh(widget.id)}
+                aria-label="Refresh"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRotating ? 'animate-spin' : ''}`} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400"
+                onClick={() => removeWidget(widget.id)}
+                aria-label="Remove"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -137,27 +162,26 @@ export function CardWidget({ widget }: CardWidgetProps) {
               </div>
             </div>
           </div>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-36">
-              <DropdownMenuItem onClick={() => refreshWidget(widget.id)} className="text-sm">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => removeWidget(widget.id)}
-                className="text-sm text-red-600 dark:text-red-400"
-              >
-                <X className="h-4 w-4 mr-2" />
-                Remove
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+              onClick={() => handleRefresh(widget.id)}
+              aria-label="Refresh"
+            >
+              <RefreshCw className={`h-4 w-4 ${isRotating ? 'animate-spin' : ''}`} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400"
+              onClick={() => removeWidget(widget.id)}
+              aria-label="Remove"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
