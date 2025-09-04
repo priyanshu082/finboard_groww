@@ -17,7 +17,7 @@
 - ** Tables**: Sortable, searchable data tables with pagination and filtering.
 - **📊 Charts**: Interactive line, bar, and area charts with real-time updates.
 
-### **Theme System** (NEW!)
+### **Theme System** 
 - **Multiple Widget Themes**: Choose from 3 professional themes for each widget
   - **Classic Theme**: Clean and professional design with emerald accents
   - **Minimal Theme**: Modern glassmorphism with subtle gradients
@@ -100,7 +100,7 @@
 
 ---
 
-##️ Usage
+## Usage
 
 1. **Add a Widget**: Click the "Add Widget" button to create a new card, table, or chart. Enter your API endpoint and select the fields you want to visualize.
 
