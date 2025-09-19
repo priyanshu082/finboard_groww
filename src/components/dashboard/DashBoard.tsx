@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -11,10 +11,22 @@ import { TableWidget } from '@/components/widgets/TableWidget';
 import { ChartWidget } from '@/components/widgets/ChartWidget';
 import { AddWidgetModal } from './AddWidgetModel';
 import { ModeToggle } from '../ui/ModeToggle';
+import { OnboardingGuide } from '../onboarding/OnboardingGuide';
 import Image from 'next/image';
 
 export function Dashboard() {
   const { widgets, isAddModalOpen, setAddModalOpen, reorderWidgets, refreshWidget } = useWidgetStore();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Check if user is new (no widgets and first visit)
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('finboard-onboarding-seen');
+    const hasWidgets = widgets.length > 0;
+    
+    if (!hasSeenOnboarding && !hasWidgets) {
+      setShowOnboarding(true);
+    }
+  }, [widgets.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,6 +43,15 @@ export function Dashboard() {
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     reorderWidgets(result.source.index, result.destination.index);
+  };
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('finboard-onboarding-seen', 'true');
+    setShowOnboarding(false);
+  };
+
+  const handleStartCreating = () => {
+    setAddModalOpen(true);
   };
 
   const renderWidget = (widget: Widget) => {
@@ -50,6 +71,13 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Onboarding Guide */}
+      <OnboardingGuide 
+        isVisible={showOnboarding}
+        onComplete={handleOnboardingComplete}
+        onStartCreating={handleStartCreating}
+      />
+
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
         <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
