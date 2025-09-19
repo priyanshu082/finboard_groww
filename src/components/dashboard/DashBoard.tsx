@@ -11,7 +11,7 @@ import { TableWidget } from '@/components/widgets/TableWidget';
 import { ChartWidget } from '@/components/widgets/ChartWidget';
 import { AddWidgetModal } from './AddWidgetModel';
 import { ModeToggle } from '../ui/ModeToggle';
-import { OnboardingGuide } from '../onboarding/OnboardingGuide';
+import OnboardingGuide from '../onboarding/OnboardingGuide';
 import Image from 'next/image';
 
 export function Dashboard() {
@@ -122,6 +122,30 @@ export function Dashboard() {
               
               {/* Mode Toggle */}
               <ModeToggle/>
+
+              {/* Onboarding Guide Button */}
+              <Button
+                onClick={() => setShowOnboarding(true)}
+                size="sm"
+                className={`relative px-3 sm:px-4 text-sm font-semibold border-2 ${
+                  !showOnboarding
+                    ? 'border-amber-400 ring-2 ring-amber-300 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 animate-pulse'
+                    : 'border-transparent bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-yellow-50 dark:hover:bg-yellow-900/30'
+                } transition`}
+                style={{ zIndex: 20 }}
+                title="Show Onboarding Guide"
+                tabIndex={0}
+                autoFocus={showOnboarding}
+              >
+                <Eye className="w-4 h-4 mr-1 text-amber-500" />
+                <span className="hidden sm:inline">Guide</span>
+                <span className="sm:hidden">Guide</span>
+                {!showOnboarding && (
+                  <span className="absolute -top-3 -right-2 bg-amber-400 text-white text-xs rounded-full px-1.5 py-0.5 shadow">
+                    New
+                  </span>
+                )}
+              </Button>
               
               {/* Add Widget Button */}
               <Button
